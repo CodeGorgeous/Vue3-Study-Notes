@@ -11,12 +11,14 @@
             区域2</div>
         <div class="item-box">
             区域3
+            <Block3 />
         </div>
         <div class="item-box">
             区域4
         </div>
         <div class="item-box">
             区域5
+            <Block5 />
         </div>
         <div class="item-box">
             区域6
@@ -26,14 +28,51 @@
 </template>
 
 <script>
-    import { defineComponent, ref } from 'vue'
+    import { defineComponent, ref, defineAsyncComponent } from 'vue'
     import DemoThree from '../../components/DemoThree/index.vue'
     import Mantle from '../../components/DemoThree/Mantle.vue'
+    import { asyncComponent } from '../../utils/tools'
+
+    // 异步组件处理
+    // const Block3 = defineAsyncComponent({
+    //     // 当加载完成
+    //     loader: () => {
+    //         return new Promise((resolve, reject) => {
+    //             setTimeout(() => {
+    //                 if (Math.random() > 0.5) return resolve(import("../../components/DemoThree/Block3.vue"))
+    //                 return reject('组件加载失败')
+    //             }, 3000)
+    //         })
+    //     },
+    //     // 加载中
+    //     loadingComponent: Loading,
+    //     errorComponent: Error
+    // })
+
+    const Block3 = asyncComponent(() => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() > 0.5) return resolve(import("../../components/DemoThree/Block3.vue"))
+                return reject('组件加载失败')
+            }, 3000)
+        })
+    })
+
+    const Block5 = asyncComponent(() => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (Math.random() > 0.5) return resolve(import("../../components/DemoThree/Block5.vue"))
+                return reject('组件加载失败')
+            }, 4000)
+        })
+    })
 
     export default defineComponent({
         components: {
             DemoThree,
-            Mantle
+            Mantle,
+            Block3,
+            Block5
         },
         setup () {
 
@@ -65,5 +104,6 @@
     box-sizing: border-box;
     border-radius: 10px;
     border: 1px solid black;
+    overflow: hidden;
 }
 </style>

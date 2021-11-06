@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        Hello CodeGorgeous!
+        组件发生错误
     </div>
 </template>
 
@@ -18,8 +18,7 @@
 
 <style scoped>
 .container {
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
+    font-size: 20px;
+    color: red;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-        Hello CodeGorgeous!
+    <div>
+        Hello Block3!
     </div>
 </template>
 
@@ -17,9 +17,5 @@
 </script>
 
 <style scoped>
-.container {
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
-}
+
 </style>

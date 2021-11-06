@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        Hello CodeGorgeous!
+        加载中...
     </div>
 </template>
 
@@ -18,8 +18,10 @@
 
 <style scoped>
 .container {
-    text-align: center;
-    font-size: 30px;
-    font-weight: bold;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>
