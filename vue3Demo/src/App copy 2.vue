@@ -1,24 +1,20 @@
 <template>
     <div>
-        <router-link to="/">Home</router-link>
-        |
-        <router-link to="/about">About</router-link>
-    </div>
-    <div>
-        <router-view />
+        <DemoTwo />
     </div>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
+    import DemoTwo from './components/DemoTwo/index.vue'
 
     export default defineComponent({
         components: {
-        },
-        setup () {
+            DemoTwo
         }
     })
 </script>
 
 <style scoped>
+
 </style>

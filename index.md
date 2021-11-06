@@ -50,7 +50,7 @@
     - **Vue3生命周期图示** ![vue3生命周期](https://v3.cn.vuejs.org/images/lifecycle.svg)
 - v-model
     - vue2中v-model和.sync都能够实现数据双向绑定, 其两者功能有重复点
-    - vue3中只保留了v-model并对其进行了改变
+    - vue3中只保留了v-model并对其进行了改变, 舍弃了.sync
         - v-model实现原理
             -   ```
                     // Parent.vue
@@ -61,13 +61,16 @@
                         @update:modelValue="value = $event"
                     />
                     // 如果相对model的名字/事件名字进行改变
-                    <MyComponent v-model:title="value"/>
+                    // 这样写的.trim需要在组件内props参数接受一个titleModifiers, 没有自定义名称时为modelModifiers是一个对象
+                    <MyComponent v-model:title.trim="value"/>
                     <MyComponent
                         :title="value"
                         @update:title="value = $event"
                     />
                 ```
         - 这样可以作为.sync的替代也可以允许我们在自定义组件上有多个v-model
+        - v-model可以进行添加自定义修饰符
+- 模板内可以有着多个根节点
 
 
 ## setup(){}

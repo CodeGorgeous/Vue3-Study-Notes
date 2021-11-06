@@ -2,31 +2,25 @@
     <div>
         <p>
             <span>编辑</span>
-            <span v-for="item in data" :key="item.id">
-                <input
-                    type="checkbox"
-                    name="select"
-                    :value="item.id"
-                    @change="dataSelectChange"
-                >
-                <input
-                    type="text"
-                    v-model="item.value"
-                >
-            </span>
+            <ComponentDemo v-for="item in data" :key="item.id" :data="item" @select="dataSelectChange" />
         </p>
         <p>
-            <span>已选择</span>
-            <span v-for="item in data" :key="item.id">{{item.is ? item.value + ',' : ''}}</span>
+            <span>已选择： </span>
+            <span v-for="item in selectData" :key="item.id">{{item.value}},</span>
         </p>
     </div>
+    <div v-if="false">1</div>
+    <div v-else-if="2">2</div>
 </template>
 
 <script>
-    import { defineComponent, reactive, toRefs, ref, watchEffect } from 'vue'
+    import { defineComponent, reactive, computed } from 'vue'
+    import ComponentDemo from '../ComponentDemo/index.vue'
 
     export default defineComponent({
-        components: {},
+        components: {
+            ComponentDemo
+        },
         setup () {
             const data = reactive([{
                 id: 1,
@@ -34,7 +28,7 @@
                 value: 'iphone',
             }, {
                 id: 2,
-                is: false,
+                is: true,
                 value: '华为',
             }, {
                 id: 3,
@@ -48,14 +42,19 @@
 
             const dataSelectChange = (e) => {
                 for (const iterator of data) {
-                    if (e.target._value === iterator.id) {
+                    if (e === iterator.id) {
                         iterator.is = !iterator.is
                     }
                 }
             }
 
+            const selectData = computed(() => {
+                return data.filter(item => item.is)
+            })
+
             return {
                 data,
+                selectData,
                 dataSelectChange
             }
         }
