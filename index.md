@@ -46,6 +46,11 @@
         ```
 - 生命周期
     - vue2的beforeDestroy和destroyed在vue3中变为beforeUnmount和unmounted
+    - vue3新增生命周期renderTracked和renderTriggered
+    - renderTracked
+        - 收集依赖时会触发, 每有一个依赖被收集就会触发一次, 参数e是一个对象, 其内含有该次所收集的依赖数据
+    - renderTriggered
+        - 当依赖发生改变时会触发, 每个依赖改变就会触发一次, 参数e是一个对象, 其内含有该次所改变的依赖
     - **Vue2生命周期图示** ![vue2生命周期](https://cn.vuejs.org/images/lifecycle.png)
     - **Vue3生命周期图示** ![vue3生命周期](https://v3.cn.vuejs.org/images/lifecycle.svg)
 - v-model
@@ -71,10 +76,114 @@
         - 这样可以作为.sync的替代也可以允许我们在自定义组件上有多个v-model
         - v-model可以进行添加自定义修饰符
 - 模板内可以有着多个根节点
+- defineAsyncComponent
+    - 用于处理异步组件
+    -   ```
+            // 自己非常简单抽离的一个处理异步的函数
+            import { defineAsyncComponent } from 'vue'
+            import Loading from '../components/DemoThree/Loading.vue'
+            import Error from '../components/DemoThree/Error.vue'
+            // callback必须返回一个promise
+            export function asyncComponent(callback) {
+                return defineAsyncComponent({
+                    // 当加载完成
+                    loader: callback,
+                    // 加载中
+                    loadingComponent: Loading,
+                    errorComponent: Error
+                })
+            }
+        ```
+- Suspense组件
+    - 和defineAsyncComponent有着类似的作用
+    - 提供了两个插槽(default和fallback), default用于放置用于异步加载的组件, fallback用于处理加载异步组件时显示的加载组件
+    -   ```
+            <template>
+                <suspense>
+                    <template #default>
+                    <todo-list />
+                    </template>
+                    <template #fallback>
+                    <div>
+                        Loading...
+                    </div>
+                    </template>
+                </suspense>
+            </template>
+        ```
+- reactivity api
+    - 数据响应式api
+    - ```import { reactive, readonly, ref, computed } from 'vue'```
+    - reactive
+        - 深度代理对象
+        - 只能代理对象
+        - ```const val = reactive({})```
+    - readonly
+        - 深度代理对象, 但该对象为只读
+        - 只能代理对象
+        - ```const val = readonly({})```
+    - ref
+        - 代理任何数据
+        - 如果代理的为对象则ref会通过reactive进行代理, 如果是已经代理的数据则直接使用代理
+        - ```const val = ref(0)```
+        - {..., value: xxx}
+    - computed
+        - 根据函数内依赖的数据, 如果数据发生变化并重新运行该函数, 会得到一个响应式数据
+        - ```const val = computed(() => a + b)```
+        - {..., value: xxx}
+    - watchEffect
+        - 监控函数内依赖值发生变化, 则该函数会重新运行
+        - ```watchEffect(() => {console.log(a, b)})```
+        - 在这个例子中只有当a或者b的值发生变化时该函数才会重新运行
+    - watch
+        - 能够能加具体的监听某个值是否发生变化
+        -   ```
+                // 监听单个数据
+                // 侦听一个 getter
+                const state = reactive({ count: 0 })
+                watch(() => state.count, (count, prevCount) => {
+                        /* ... */
+                    }
+                )
+
+                // 直接侦听一个 ref
+                const count = ref(0)
+                watch(count, (count, prevCount) => {
+                    /* ... */
+                })
+                // 监听多个数据
+                watch([fooRef, barRef], ([foo, bar], [prevFoo, prevBar]) => {
+                    /* ... */
+                })
+            ```
+    - isProxy
+        - 判断数据是否由reactive/readonly所创建的代理
+    - isReactive
+        - 判断数据是否由reactive所创建的代理
+    - isReadonly
+        - 判断数据是否由readonly所创建的代理
+    - isRef
+        - 判断数据是否由ref所创建的代理
+    - unref
+        - 当不清楚value是值还是本身是值时使用
+        - 原理: ```isRef(val) ? val.value : val```
+    - toRef
+        - 得到某个响应式对象的ref格式
+        -   ```
+                const obj = reactive({ a: 1, b: 2 })
+                const aRef = toRef(obj, 'a') // {..., value: 1}
+            ```
+    - toRefs
+        - 将某个响应式对象全部转换为ref格式
+        -   ```
+                const obj = reactive({ a: 1, b: 2 })
+                const objRefs = toRefs(obj) // {a: {..., value: 1}, b: {..., value: 2}}
+            ```
+- composition api
 
 
 ## setup(){}
-
+- **composition api**
 - 运行时间节点
     - 在beforeCreate前运行
 - 在setup内使用生命周期
@@ -94,6 +203,9 @@
                 return countRef.value + countRef.value
             })
         ```
+- 在setup中抛出事件
+    - setup中第二个参数就是context对象, 该对象内还有emit属性, 用于抛出事件, 该对象内还由slots、attrs
+    - ```setup (props, context) {console.log(context)}```
 
 ## Vite
 

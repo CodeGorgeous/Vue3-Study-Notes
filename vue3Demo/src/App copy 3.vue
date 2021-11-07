@@ -1,17 +1,19 @@
 <template>
     <div class="container">
-        Hello
-        <DemoFour />
+        <router-link to="/">Home</router-link>
+        |
+        <router-link to="/about">About</router-link>
+    </div>
+    <div>
+        <router-view />
     </div>
 </template>
 
 <script>
     import { defineComponent } from 'vue'
-    import DemoFour from './components/DemoFour/index.vue'
 
     export default defineComponent({
         components: {
-            DemoFour
         },
         setup () {
         }
