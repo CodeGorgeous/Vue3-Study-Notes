@@ -1,18 +1,7 @@
 <template>
     <div class="container">
-        <router-link :to="{
-            name: 'Home'
-        }">
-            Home
-        </router-link>
-        <router-link :to="{
-            name: 'About'
-        }">
-            About
-        </router-link>
-    </div>
-    <div>
-        <router-view></router-view>
+        Hello
+        <DemoFour />
     </div>
 </template>
 

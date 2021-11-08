@@ -286,3 +286,46 @@
     - 无需递归, 每次对数据的操作都必然会经过代理的get/set, 对于数据的访问是动态的
     - Proxy可以监控到成员的更改
     - Proxy的效率比Object.defineProperty更高
+
+## vue-router
+
+- 配置方式
+    -   ```
+            // src/route/index.js
+                import { createRouter, createWebHistory } from 'vue-router'
+                import Home from '../view/Home/index.vue'
+                import About from '../view/About/index.vue'
+                import { defineAsyncComponent } from 'vue'
+
+                export default createRouter({
+                    history: createWebHistory(), // 新版本配置路由模式
+                    routes: [
+                        { path: "/", component: Home },
+                        {
+                            path: "/about",
+                            // 对于异步组件的处理
+                            component: defineAsyncComponent({
+                                loader: () => {
+                                    return new Promise((resolve, reject) => {
+                                        setTimeout(() => {
+                                            resolve(About)
+                                        }, 2000)
+                                    })
+                                }
+                            })
+                        },
+                    ]
+                })
+            // src/main.js
+                import { createApp } from 'vue'
+                import App from './App.vue'
+                import router from './route'
+                import "nprogress/nprogress.css"
+
+                createApp(App).use(router).mount('#app')
+        ```
+
+## vuex
+
+- 配置方式
+    - 
